@@ -1,0 +1,156 @@
+int TimeTrial_SetEnabled(void* a1) {
+	bool on = luaL_checknumber(a1, 1);
+	if (on) {
+		InitTimeTrials();
+		bLastRaceWasTimeTrial = true;
+	}
+	else if (bTimeTrialsEnabled) {
+		UninitTimeTrials();
+		bLastRaceWasTimeTrial = false;
+	}
+	bTimeTrialsEnabled = on;
+	return 0;
+}
+
+int TimeTrial_Set3LapMode(void* a1) {
+	b3LapMode = luaL_checknumber(a1, 1);
+	return 0;
+}
+
+int TimeTrial_Get3LapMode(void* a1) {
+	lua_pushnumber(a1, b3LapMode);
+	return 1;
+}
+
+int TimeTrial_SetPropsEnabled(void* a1) {
+	bool on = luaL_checknumber(a1, 1);
+	if (on) EnableProps();
+	else DisableProps();
+	bNoProps = !on;
+	return 0;
+}
+
+int TimeTrial_SetPropsEnabledBool(void* a1) {
+	bool on = luaL_checknumber(a1, 1);
+	bNoProps = !on;
+	return 0;
+}
+
+int TimeTrial_SetNitroType(void* a1) {
+	nNitroType = luaL_checknumber(a1, 1);
+	return 0;
+}
+
+int TimeTrial_SetUpgradeLevel(void* a1) {
+	nUpgradeLevel = luaL_checknumber(a1, 1);
+	return 0;
+}
+
+int TimeTrial_SetHandlingMode(void* a1) {
+	nHandlingMode = luaL_checknumber(a1, 1);
+	return 0;
+}
+
+int TimeTrial_GetPropsEnabled(void* a1) {
+	lua_pushnumber(a1, !bNoProps);
+	return 1;
+}
+
+int TimeTrial_GetNitroType(void* a1) {
+	lua_pushnumber(a1, nNitroType);
+	return 1;
+}
+
+int TimeTrial_SetCareerMode(void* a1) {
+	bIsCareerMode = luaL_checknumber(a1, 1);
+	return 0;
+}
+
+int TimeTrial_SetCareerSuperAuthors(void* a1) {
+	bDisplaySuperAuthorTime = (int)luaL_checknumber(a1, 1) >= 1;
+	bDisplayAuthorInCareer = (int)luaL_checknumber(a1, 1) >= 2;
+	return 0;
+}
+
+int TimeTrial_WasLastRaceTimeTrial(void* a1) {
+	lua_pushboolean(a1, bLastRaceWasTimeTrial);
+	bLastRaceWasTimeTrial = false;
+	return 1;
+}
+
+int TimeTrial_GetLastEventGhostTime(void* a1) {
+	lua_pushnumber(a1, OpponentsCareer[(int)luaL_checknumber(a1, 1)].nLastRacePBTime);
+	return 1;
+}
+
+int TimeTrial_IsLastEventGhostValid(void* a1) {
+	lua_pushnumber(a1, OpponentsCareer[(int)luaL_checknumber(a1, 1)].nLastRacePBTime != UINT_MAX);
+	return 1;
+}
+
+int TimeTrial_GetLastEventPlayerTime(void* a1) {
+	lua_pushnumber(a1, nCareerLastRacePBTime);
+	return 1;
+}
+
+/*int TimeTrial_CheckCheatCode(void* a1) {
+	auto str = lua_tolstring(a1, 1, nullptr);
+	if (!wcscmp(str, L"ghosthunter")) {
+		bDisplayGhostsInCareer = true;
+		lua_pushboolean(a1, true);
+		return 1;
+	}
+	return 0;
+}*/
+
+void RegisterLUAFunction(void* a1, void* function, const char* name) {
+	lua_setglobal(a1, name);
+	lua_pushcfunction(a1, function, 0);
+	lua_settable(a1, LUA_ENVIRONINDEX);
+}
+
+void CustomLUAFunctions(void* a1) {
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetEnabled, "TimeTrial_SetEnabled");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_Set3LapMode, "TimeTrial_Set3LapMode");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_Get3LapMode, "TimeTrial_Get3LapMode");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetPropsEnabled, "TimeTrial_SetPropsEnabled");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetPropsEnabledBool, "TimeTrial_SetPropsEnabledBool");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetNitroType, "TimeTrial_SetNitroType");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetUpgradeLevel, "TimeTrial_SetUpgradeLevel");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetHandlingMode, "TimeTrial_SetHandlingMode");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_GetPropsEnabled, "TimeTrial_GetPropsEnabled");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_GetNitroType, "TimeTrial_GetNitroType");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetCareerMode, "TimeTrial_SetCareerMode");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetCareerSuperAuthors, "TimeTrial_SetCareerSuperAuthors");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_GetLastEventGhostTime, "TimeTrial_GetLastEventGhostTime");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_IsLastEventGhostValid, "TimeTrial_IsLastEventGhostValid");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_GetLastEventPlayerTime, "TimeTrial_GetLastEventPlayerTime");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_WasLastRaceTimeTrial, "TimeTrial_WasLastRaceTimeTrial");
+	//RegisterLUAFunction(a1, (void*)&TimeTrial_CheckCheatCode, "TimeTrial_CheckCheatCode");
+}
+
+/*template<int id>
+int __cdecl GetTimeTrialTime(wchar_t* str, size_t len, void* a3, void* a4) {
+	auto timestr = GetTimeText(OpponentsCareer[id].nPBTime, true);
+	mbstowcs(str, timestr.c_str(), len);
+	return wcslen(str);
+}
+
+int __cdecl GetTotalTime(wchar_t* str, size_t len, void* a3, void* a4) {
+	auto ply = *(Player**)a4;
+	auto score = GetPlayerScore<PlayerScoreRace>(ply->nPlayerId);
+	auto time = ply->nRaceTime;
+	if (time < 0) time = 0;
+	if (score->nCurrentLap >= pScoreManager->nNumLaps) {
+		time = score->nLapTimes[score->nCurrentLap];
+	}
+
+	auto timestr = GetTimeText(time, true);
+	mbstowcs(str, timestr.c_str(), len);
+	return wcslen(str);
+}*/
+
+void ApplyLUAPatches() {
+	NyaFO2Hooks::PlaceScriptHook();
+	NyaFO2Hooks::aScriptFuncs.push_back(CustomLUAFunctions);
+}
