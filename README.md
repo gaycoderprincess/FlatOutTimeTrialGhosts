@@ -2,12 +2,7 @@
 
 Plugin to add a time trial mode with laptime replay ghosts to FlatOut
 
-## Installation
-
-- Make sure you have v1.1 of the game, as this is the only version this plugin is compatible with. (exe size of 2822144 bytes)
-- Plop the files into your game folder, edit `FlatOutTimeTrialGhosts_gcp.toml` to change the options to your liking.
-- Start the game and launch any race, you will now have a PB ghost to race against instead of AI opponents.
-- Enjoy, nya~ :3
+This plugin is a companion plugin for the Chloe Collection mod, and is not available standalone
 
 ## Building
 

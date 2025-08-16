@@ -154,3 +154,32 @@ void ApplyLUAPatches() {
 	NyaFO2Hooks::PlaceScriptHook();
 	NyaFO2Hooks::aScriptFuncs.push_back(CustomLUAFunctions);
 }
+
+extern "C" __declspec(dllexport) void __cdecl ChloeTimeTrial_GetCareerMedalTimes(int level, int car, int* outTimes) {
+	bIsCareerMode = true;
+	for (int i = 0; i < 5; i++) {
+		OpponentsCareer[i].nLastRacePBTime = UINT_MAX;
+		LoadPB(&OpponentsCareer[i], car, level, LAPTYPE_STANDING, i+1);
+		outTimes[i] = OpponentsCareer[i].nPBTime;
+		if (outTimes[i] < 1000) {
+			outTimes[i] = OpponentsCareer[i].aPBGhost.size() * 10;
+		}
+	}
+}
+
+extern "C" __declspec(dllexport) const wchar_t* __cdecl ChloeTimeTrial_GetCareerSuperAuthorName(int level, int car) {
+	bIsCareerMode = true;
+	OpponentsCareer[4].nLastRacePBTime = UINT_MAX;
+	LoadPB(&OpponentsCareer[4], car, level, LAPTYPE_STANDING, 5);
+	return OpponentsCareer[4].sPlayerName.c_str();
+}
+
+extern "C" __declspec(dllexport) uint32_t __cdecl ChloeTimeTrial_GetCareerPBTime(int level, int car) {
+	bIsCareerMode = true;
+	StandingLapPB.nLastRacePBTime = UINT_MAX;
+	LoadPB(&StandingLapPB, car, level, LAPTYPE_STANDING, false);
+	if (StandingLapPB.nPBTime < 1000) {
+		return StandingLapPB.aPBGhost.size() * 10;
+	}
+	return StandingLapPB.nPBTime;
+}

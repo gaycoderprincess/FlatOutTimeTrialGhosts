@@ -149,10 +149,17 @@ void __fastcall NoGhostCollisions(float* matrix1, float* matrix2) {
 		}
 	}
 
-	NyaHookLib::Patch<uint64_t>(0x4B1492, isGhost ? 0x84D990000000F4E9 : 0x84D9000000F3850F);
+	// prop activation
+	NyaHookLib::Patch<uint64_t>(0x4B136C, isGhost ? 0x46D9900000021AE9 : 0x46D900000081840F);
+
+	//// prop activation
+	//NyaHookLib::Patch<uint64_t>(0x4B136C, isGhost ? 0x46D99000000082E9 : 0x46D900000081840F);
+	//NyaHookLib::Patch<uint64_t>(0x4B13FA, isGhost ? 0x46D99000000084E9 : 0x46D900000083840F);
+	//// car to car collision
+	//NyaHookLib::Patch<uint64_t>(0x4B1492, isGhost ? 0x84D990000000F4E9 : 0x84D9000000F3850F);
 }
 
-uintptr_t NoGhostCollisionsASM_jmp = 0x4B148D;
+uintptr_t NoGhostCollisionsASM_jmp = 0x4B133B;
 void __attribute__((naked)) NoGhostCollisionsASM() {
 	__asm__ (
 		"pushad\n\t"
@@ -161,8 +168,8 @@ void __attribute__((naked)) NoGhostCollisionsASM() {
 		"call %1\n\t"
 		"popad\n\t"
 
-		"fld dword ptr [esp+0x30]\n\t"
-		"fcomp dword ptr [0x667CB8]\n\t"
+		"mov al, [edi+0xB4]\n\t"
+		"test al, 0x40\n\t"
 		"jmp %0\n\t"
 			:
 			:  "m" (NoGhostCollisionsASM_jmp), "i" (NoGhostCollisions)
@@ -186,7 +193,7 @@ void InitTimeTrials() {
 	NyaHookLib::PatchRelative(NyaHookLib::JMP, 0x4541A4, &FinishLapASM);
 	NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x43F05C, &GetNumOpponents);
 	NyaHookLib::PatchRelative(NyaHookLib::JMP, 0x406CF0, &ProcessGhostCar); // disable ai control
-	NyaHookLib::PatchRelative(NyaHookLib::JMP, 0x4B1483, &NoGhostCollisionsASM);
+	NyaHookLib::PatchRelative(NyaHookLib::JMP, 0x4B1333, &NoGhostCollisionsASM);
 }
 
 void UninitTimeTrials() {
