@@ -160,10 +160,7 @@ extern "C" __declspec(dllexport) void __cdecl ChloeTimeTrial_GetCareerMedalTimes
 	for (int i = 0; i < 5; i++) {
 		OpponentsCareer[i].nLastRacePBTime = UINT_MAX;
 		LoadPB(&OpponentsCareer[i], car, level, LAPTYPE_STANDING, i+1);
-		outTimes[i] = OpponentsCareer[i].nPBTime;
-		if (outTimes[i] < 1000) {
-			outTimes[i] = OpponentsCareer[i].aPBGhost.size() * 10;
-		}
+		outTimes[i] = OpponentsCareer[i].GetFinishTime();
 	}
 }
 
@@ -178,8 +175,5 @@ extern "C" __declspec(dllexport) uint32_t __cdecl ChloeTimeTrial_GetCareerPBTime
 	bIsCareerMode = true;
 	StandingLapPB.nLastRacePBTime = UINT_MAX;
 	LoadPB(&StandingLapPB, car, level, LAPTYPE_STANDING, false);
-	if (StandingLapPB.nPBTime < 1000) {
-		return StandingLapPB.aPBGhost.size() * 10;
-	}
-	return StandingLapPB.nPBTime;
+	return StandingLapPB.GetFinishTime();
 }

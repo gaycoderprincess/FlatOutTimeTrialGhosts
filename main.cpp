@@ -62,6 +62,7 @@ void __fastcall SetAISameCar(Player* pPlayer) {
 	if (!bTimeTrialsEnabled) return;
 
 	pPlayer->nCarId = pGameFlow->nCar;
+	pPlayer->nCarSkinId = 1;
 
 	if (pPlayer->nPlayerId <= 2) return;
 	auto tmp = LoadTemporaryGhostForSpawning(pPlayer->nCarId);
