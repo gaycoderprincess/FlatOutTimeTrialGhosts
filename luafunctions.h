@@ -51,6 +51,11 @@ int TimeTrial_SetHandlingMode(void* a1) {
 	return 0;
 }
 
+int TimeTrial_SetTrackReversed(void* a1) {
+	bTrackReversed = luaL_checknumber(a1, 1);
+	return 0;
+}
+
 int TimeTrial_GetPropsEnabled(void* a1) {
 	lua_pushnumber(a1, !bNoProps);
 	return 1;
@@ -118,6 +123,7 @@ void CustomLUAFunctions(void* a1) {
 	RegisterLUAFunction(a1, (void*)&TimeTrial_SetNitroType, "TimeTrial_SetNitroType");
 	RegisterLUAFunction(a1, (void*)&TimeTrial_SetUpgradeLevel, "TimeTrial_SetUpgradeLevel");
 	RegisterLUAFunction(a1, (void*)&TimeTrial_SetHandlingMode, "TimeTrial_SetHandlingMode");
+	RegisterLUAFunction(a1, (void*)&TimeTrial_SetTrackReversed, "TimeTrial_SetTrackReversed");
 	RegisterLUAFunction(a1, (void*)&TimeTrial_GetPropsEnabled, "TimeTrial_GetPropsEnabled");
 	RegisterLUAFunction(a1, (void*)&TimeTrial_GetNitroType, "TimeTrial_GetNitroType");
 	RegisterLUAFunction(a1, (void*)&TimeTrial_SetCareerMode, "TimeTrial_SetCareerMode");
@@ -157,6 +163,7 @@ void ApplyLUAPatches() {
 
 extern "C" __declspec(dllexport) void __cdecl ChloeTimeTrial_GetCareerMedalTimes(int level, int car, int* outTimes) {
 	bIsCareerMode = true;
+	bTrackReversed = false;
 	for (int i = 0; i < 5; i++) {
 		OpponentsCareer[i].nLastRacePBTime = UINT_MAX;
 		LoadPB(&OpponentsCareer[i], car, level, LAPTYPE_STANDING, i+1);
@@ -166,6 +173,7 @@ extern "C" __declspec(dllexport) void __cdecl ChloeTimeTrial_GetCareerMedalTimes
 
 extern "C" __declspec(dllexport) const wchar_t* __cdecl ChloeTimeTrial_GetCareerSuperAuthorName(int level, int car) {
 	bIsCareerMode = true;
+	bTrackReversed = false;
 	OpponentsCareer[4].nLastRacePBTime = UINT_MAX;
 	LoadPB(&OpponentsCareer[4], car, level, LAPTYPE_STANDING, 5);
 	return OpponentsCareer[4].sPlayerName.c_str();
@@ -173,6 +181,7 @@ extern "C" __declspec(dllexport) const wchar_t* __cdecl ChloeTimeTrial_GetCareer
 
 extern "C" __declspec(dllexport) uint32_t __cdecl ChloeTimeTrial_GetCareerPBTime(int level, int car) {
 	bIsCareerMode = true;
+	bTrackReversed = false;
 	StandingLapPB.nLastRacePBTime = UINT_MAX;
 	LoadPB(&StandingLapPB, car, level, LAPTYPE_STANDING, false);
 	return StandingLapPB.GetFinishTime();
