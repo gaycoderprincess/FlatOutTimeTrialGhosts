@@ -7,8 +7,8 @@ namespace ChloeTimeTrial {
 		return nullptr;
 	}
 
-	void GetCareerMedalTimes(int level, int car, int* outTimes) {
-		static auto funcPtr = GetFuncPtr<void(__cdecl*)(int, int, int*)>("ChloeTimeTrial_GetCareerMedalTimes");
+	void GetCareerMedalTimes(int level, int car, uint32_t* outTimes) {
+		static auto funcPtr = GetFuncPtr<void(__cdecl*)(int, int, uint32_t*)>("ChloeTimeTrial_GetCareerMedalTimes");
 		if (!funcPtr) return;
 		funcPtr(level, car, outTimes);
 	}
