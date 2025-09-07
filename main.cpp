@@ -22,11 +22,11 @@ void SetGhostVisuals(bool on) {
 void UninitTimeTrials();
 
 void DisableProps() {
-	NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x4CD314, 0x4C9758);
+	NyaHookLib::Patch<uint8_t>(0x4CD2AE, 0xEB);
 }
 
 void EnableProps() {
-	NyaHookLib::PatchRelative(NyaHookLib::CALL, 0x4CD314, 0x4C95E0);
+	NyaHookLib::Patch<uint8_t>(0x4CD2AE, 0x74);
 }
 
 #include "timetrialshared.h"
