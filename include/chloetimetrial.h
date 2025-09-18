@@ -24,4 +24,16 @@ namespace ChloeTimeTrial {
 		if (!funcPtr) return UINT_MAX;
 		return funcPtr(level, car);
 	}
+
+	uint32_t GetCurrentRacePBTime(bool standing, bool opponent) {
+		static auto funcPtr = GetFuncPtr<uint32_t(__cdecl*)(bool, bool)>("ChloeTimeTrial_GetCurrentRacePBTime");
+		if (!funcPtr) return UINT_MAX;
+		return funcPtr(standing, opponent);
+	}
+
+	bool GetCurrentRacePBTimeJustUpdated(bool standing, bool opponent) {
+		static auto funcPtr = GetFuncPtr<bool(__cdecl*)(bool, bool)>("ChloeTimeTrial_GetCurrentRacePBTimeJustUpdated");
+		if (!funcPtr) return UINT_MAX;
+		return funcPtr(standing, opponent);
+	}
 }

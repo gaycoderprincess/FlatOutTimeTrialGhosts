@@ -166,3 +166,25 @@ extern "C" __declspec(dllexport) uint32_t __cdecl ChloeTimeTrial_GetCareerPBTime
 	LoadPB(&StandingLapPB, car, level, LAPTYPE_STANDING, false);
 	return StandingLapPB.GetFinishTime();
 }
+
+extern "C" __declspec(dllexport) uint32_t __cdecl ChloeTimeTrial_GetCurrentRacePBTime(bool standing, bool opponent) {
+	if (b3LapMode) return opponent ? OpponentThreeLapPB.GetFinishTime() : ThreeLapPB.GetFinishTime();
+
+	if (standing) {
+		return opponent ? OpponentStandingLapPB.GetFinishTime() : StandingLapPB.GetFinishTime();
+	}
+	else {
+		return opponent ? OpponentRollingLapPB.GetFinishTime() : RollingLapPB.GetFinishTime();
+	}
+}
+
+extern "C" __declspec(dllexport) bool __cdecl ChloeTimeTrial_GetCurrentRacePBTimeJustUpdated(bool standing, bool opponent) {
+	if (b3LapMode) return opponent ? OpponentThreeLapPB.fTextHighlightTime > 0 : ThreeLapPB.fTextHighlightTime > 0;
+
+	if (standing) {
+		return opponent ? OpponentStandingLapPB.fTextHighlightTime > 0 : StandingLapPB.fTextHighlightTime > 0;
+	}
+	else {
+		return opponent ? OpponentRollingLapPB.fTextHighlightTime > 0 : RollingLapPB.fTextHighlightTime > 0;
+	}
+}
