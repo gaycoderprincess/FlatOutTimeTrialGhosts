@@ -102,7 +102,6 @@ int TimeTrial_CheckCheatCode(void* a1) {
 	if (!pMenuEventManager->wsKeyboardInput.Get()) return 0;
 	std::wstring str = pMenuEventManager->wsKeyboardInput.Get();
 	std::transform(str.begin(), str.end(), str.begin(), [](wchar_t c){ return std::tolower(c); });
-	WriteLog(std::format("Cheat entered - {}", GetStringNarrow(str)));
 	if (str == L"ghostson") {
 		bDisplayGhostsInCareer = true;
 	}
