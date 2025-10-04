@@ -11,8 +11,9 @@
 #include "../../nya-common-fouc/fo2versioncheck.h"
 #include "chloemenulib.h"
 
+void __thiscall ProcessGhostCar(Player* pPlayer, float time);
 void SetPlayerControl(bool on) {
-	NyaHookLib::Patch<uint32_t>(0x66059C, on ? 0x449CF0 : 0x44A0A3);
+	NyaHookLib::Patch<uint32_t>(0x66059C, on ? 0x449CF0 : (uintptr_t)&ProcessGhostCar);
 }
 
 void SetGhostVisuals(bool on) {
