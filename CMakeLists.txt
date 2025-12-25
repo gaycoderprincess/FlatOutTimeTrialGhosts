@@ -29,7 +29,7 @@ target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../nya-common/3rdparty/
 target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../nya-common/3rdparty/imgui/backends)
 target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../nya-common-fo1)
 target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../FlatOut2TimeTrialGhosts)
-target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../FlatOutUCMenuLib/include)
+target_include_directories(FlatOutTimeTrialGhosts PUBLIC ../CwoeeMenuLib/include)
 target_link_options(FlatOutTimeTrialGhosts PRIVATE "-Wl,--exclude-all-symbols")
 set_target_properties(FlatOutTimeTrialGhosts PROPERTIES PREFIX "")
 set_target_properties(FlatOutTimeTrialGhosts PROPERTIES SUFFIX "_gcp.dll")
